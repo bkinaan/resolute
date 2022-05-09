@@ -1,6 +1,6 @@
 //import java.io.*;
+import java.security.DrbgParameters.NextBytes;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
 * Main
@@ -13,30 +13,55 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) {
-
         Scanner input = new Scanner(System.in);
 
-        System.out.println("Welcome to Resolute.");
-        System.out.println("Initilizing systems...please wait.");
-        suspend(3);
-        System.out.println("Please enter your username:");
-        String username = input.next();
-        
-        System.out.println("Welcome " + username);
+        UserData userdata = new UserData();
+
+        login(input, userdata);
 
         input.close();
         
     }
 
-    static private void suspend(int timeout) {
-        try {
-            TimeUnit.SECONDS.sleep(timeout);
-        } catch (InterruptedException ie) {
-            System.out.println("*** ERROR: Interrupted stream ***");
-        }
-    }
-/* 
-    public static User login(Scanner input) {
+    public static User login(Scanner input, UserData userdata) {
+        System.out.println("Welcome to Resolute.");
+        System.out.println("Please enter your username:");
+        String username = input.next();
+        
+        User user = userdata.getUser(username);
 
-    } */
+        /* user exists */
+
+        if (user != null) {
+            while (true) {
+                System.out.println("Please enter your password:");
+                String password = input.next();
+                if (userdata.verfiyLogin(user, password)) {
+                    System.out.println("Welcome back " + username);
+                    return user;
+                }
+                System.out.println("Your password is incorrect please try again.");
+            }
+        }
+
+        /* need to make a new user */
+
+        System.out.println("Please enter a password for your account:");
+        System.out.println("Note: your password must contain 10 characters including a capital letter, number, and special character");
+        String password = input.next();
+
+
+        Status status = null;
+        if (username.equals("ADMIN")) {
+            status = ADMIN;
+        } else {
+            status = MEMBER;
+        }
+
+        User user = new User(username, password, status);
+
+        userdata.addUser(user);
+
+        return user;
+    }
 }
