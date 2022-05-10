@@ -1,5 +1,4 @@
 //import java.io.*;
-import java.security.DrbgParameters.NextBytes;
 import java.util.*;
 
 /**
@@ -17,7 +16,9 @@ public class Main {
 
         UserData userdata = new UserData();
 
-        login(input, userdata);
+        User user = login(input, userdata);
+
+        application(input, userdata, user);
 
         input.close();
         
@@ -53,15 +54,57 @@ public class Main {
 
         Status status = null;
         if (username.equals("ADMIN")) {
-            status = ADMIN;
+            status = Status.ADMIN;
         } else {
-            status = MEMBER;
+            status = Status.MEMBER;
         }
 
-        User user = new User(username, password, status);
+        user = new User(username, password, status);
 
         userdata.addUser(user);
 
         return user;
+    }
+
+    public static void application(Scanner input, UserData userdata, User user) {
+        final int MAX_OPTIONS = 5;
+        final String mainOptions = """
+            What would you like to do?
+            0. Logout
+            1. View tasks
+            2. Add task
+            3. View sections
+            4. Add section
+            5. Settings
+            """;
+        System.out.println("Logged in.");
+        System.out.println(mainOptions);
+
+        int userInput = input.nextInt();
+
+        while (userInput < 0 || userInput > MAX_OPTIONS) {
+            System.out.println("Invalid input. Please try again.");
+            System.out.println(mainOptions);
+            userInput = input.nextInt();
+        }
+
+        switch (userInput) {
+            case 0: boolean logoutSuccess = logout(userdata, user);
+                    if (logoutSuccess) {return;} 
+                    else {System.out.println("There was an error. Ending application."); return;}
+            case 1: // TODO: ADD FUNCTION TO VIEW TASKS
+            case 2: // TODO: ADD FUNCTION TO ADD TASK
+            case 3: // TODO: ADD FUNCTION TO VIEW SECTIONS [RENAME]
+            case 4: // TODO: ADD FUNCTION TO ADD SECTION [RENAME]
+            case 5: // TODO: ADD FUNCTION TO GO TO SETTINGS
+        }
+    }
+
+    public boolean logout(UserData userdata, User user) {
+        System.out.println("Closing application...please wait.");
+        
+        userdata.writeToFile();
+
+        return true;
     }
 }
