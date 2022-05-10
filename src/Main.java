@@ -77,6 +77,9 @@ public class Main {
             4. Add section
             5. Settings
             """;
+
+        TaskData taskData = new TaskData(user.getUsername());
+
         System.out.println("Logged in.");
         System.out.println(mainOptions);
 
@@ -92,19 +95,41 @@ public class Main {
             case 0: boolean logoutSuccess = logout(userdata, user);
                     if (logoutSuccess) {return;} 
                     else {System.out.println("There was an error. Ending application."); return;}
-            case 1: // TODO: ADD FUNCTION TO VIEW TASKS
-            case 2: // TODO: ADD FUNCTION TO ADD TASK
+            case 1: viewAllTasks(taskData);
+            case 2: addTask(input, taskData);
             case 3: // TODO: ADD FUNCTION TO VIEW SECTIONS [RENAME]
             case 4: // TODO: ADD FUNCTION TO ADD SECTION [RENAME]
             case 5: // TODO: ADD FUNCTION TO GO TO SETTINGS
         }
     }
 
-    public boolean logout(UserData userdata, User user) {
+    public static boolean logout(UserData userdata, User user) {
         System.out.println("Closing application...please wait.");
         
         userdata.writeToFile();
 
         return true;
+    }
+
+    public static void viewAllTasks(TaskData taskData) {
+        ArrayList<Task> tasks = taskData.getTasks();
+
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println((i + 1) + ". " + tasks.get(i));
+        }
+    }
+
+    public static void addTask(Scanner input, TaskData taskData) {
+        System.out.println("Enter the task:");
+        String taskContent = input.next();
+        Task task = new Task(taskContent);
+        boolean success = taskData.addTask(task);
+        if (!success) {
+            System.out.println("There was a problem. Please try again.");
+        }
+    }
+
+    public static void viewSections() {
+        
     }
 }

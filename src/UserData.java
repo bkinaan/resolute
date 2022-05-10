@@ -34,7 +34,7 @@ public class UserData {
     }
 
     private boolean writeToFile(ArrayList<User> users) {
-        File file= new File("users");
+        File file = new File("users");
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
             oos.writeObject(users);

@@ -1,8 +1,8 @@
-import java.sql.Date;
+import java.time.Instant;
 
 public class Task {
     String task;
-    Date dueDate;
+    Instant dueDate;
     Priority priority;
 
     public Task(String task) {
@@ -11,13 +11,13 @@ public class Task {
         this.priority = Priority.P4;
     }
 
-    public Task(String task, Date dueDate) {
+    public Task(String task, Instant dueDate) {
         this.task = task;
         this.dueDate = dueDate;
         this.priority = Priority.P4;
     }
 
-    public Task(String task, Due dueDate, Priority priority) {
+    public Task(String task, Instant dueDate, Priority priority) {
         this.task = task;
         this.dueDate = dueDate;
         this.priority = priority;
@@ -33,7 +33,7 @@ public class Task {
         return task;
     }
 
-    public Date getDueDate() {
+    public Instant getDueDate() {
         return dueDate;
     }
 
@@ -45,7 +45,7 @@ public class Task {
         this.task = task;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(Instant dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -55,8 +55,19 @@ public class Task {
 
     @Override
     public String toString() {
-        return this.getTask() + "\n" + "Due: " + this.getDueDate() + "\n" 
-                + "Priority: " + this.getPriority();
+        String output = "";
+
+        output += this.getTask() + "\n";
+
+        if (this.getDueDate() == null) {
+            output += "Due date: none\n";
+        } else {
+            output += "Due date: " + this.getDueDate() + "\n";
+        }
+
+        output += "Priority: " + this.getPriority();
+        
+        return output;
     }
 
     @Override
@@ -72,7 +83,7 @@ public class Task {
         Task task = (Task) obj;
 
         return (this.getTask().equals(task.getTask())) 
-                && (this.getDueDate() == task.getDueDate()) 
+                && (this.getDueDate().equals(task.getDueDate())) 
                 && (this.getPriority() == task.getPriority());
     }
 }

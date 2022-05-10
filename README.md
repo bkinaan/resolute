@@ -1,8 +1,10 @@
 # resolute
 
-WORK IN PROGRESS
+WORK IN PROGRESS--
 
-A to-do list application that combines task tracking and related notes. 
+Currently building classes for application usage and initializing file storage system.
+
+A to-do list application that combines task tracking and related notes.
 
 ## Key Features
 
@@ -12,7 +14,7 @@ A to-do list application that combines task tracking and related notes.
 
 ### Notable Features
 
-- Groups that can be created and tasks can be added to these groups
-- Groups can also contain notes
+- Sections that can be created and tasks can be added to these groups
+- Sections can also contain notes
 
 **Note: heavy inspiration from "Todoist" application**
