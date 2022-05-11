@@ -11,6 +11,8 @@ import java.util.*;
 */
 
 public class Main {
+    final static String INVALID_INPUT = "Invalid input. Please try again.";
+
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
@@ -67,8 +69,9 @@ public class Main {
     }
 
     public static void application(Scanner input, UserData userdata, User user) {
+        final int MIN_OPTIONS = 0;
         final int MAX_OPTIONS = 5;
-        final String mainOptions = """
+        final String MAIN_OPTIONS = """
             What would you like to do?
             0. Logout
             1. View tasks
@@ -79,15 +82,16 @@ public class Main {
             """;
 
         TaskData taskData = new TaskData(user.getUsername());
+        SectionData sectionData = new SectionData(user.getUsername());
 
         System.out.println("Logged in.");
-        System.out.println(mainOptions);
+        System.out.println(MAIN_OPTIONS);
 
         int userInput = input.nextInt();
 
-        while (userInput < 0 || userInput > MAX_OPTIONS) {
-            System.out.println("Invalid input. Please try again.");
-            System.out.println(mainOptions);
+        while (userInput < MIN_OPTIONS || userInput > MAX_OPTIONS) {
+            System.out.println(INVALID_INPUT);
+            System.out.println(MAIN_OPTIONS);
             userInput = input.nextInt();
         }
 
@@ -97,8 +101,8 @@ public class Main {
                     else {System.out.println("There was an error. Ending application."); return;}
             case 1: viewAllTasks(taskData);
             case 2: addTask(input, taskData);
-            case 3: // TODO: ADD FUNCTION TO VIEW SECTIONS [RENAME]
-            case 4: // TODO: ADD FUNCTION TO ADD SECTION [RENAME]
+            case 3: viewSections(sectionData);
+            case 4: addSection(input, sectionData);
             case 5: // TODO: ADD FUNCTION TO GO TO SETTINGS
         }
     }
@@ -124,6 +128,7 @@ public class Main {
         String taskContent = input.next();
         Task task = new Task(taskContent);
         taskData.addTask(task);
+        System.out.println("New task added.");
     }
 
     public static void viewSections(SectionData sectionData) {
@@ -135,6 +140,42 @@ public class Main {
     }
 
     public static void addSection(Scanner input, SectionData sectionData) {
-        System.out.println("Enter");
+        System.out.println("Enter the new section name:");
+        String sectionName = input.next();
+        Section section = new Section(sectionName);
+        sectionData.addSection(section);
+        System.out.println("New section added.");
+    }
+
+    public static void settings(Scanner input, UserData userdata, User user) {
+        final int MIN_OPTIONS = 0;
+        final int MAX_OPTIONS = 3;
+        final String SETTINGS_OPTIONS = """
+                0. Main Menu
+                1. Change Password
+                2. Logout
+                3. Delete Account
+                """;
+
+        System.out.println(SETTINGS_OPTIONS);
+
+        int userInput = input.nextInt();
+
+        while (userInput < MIN_OPTIONS || userInput > MAX_OPTIONS) {
+            System.out.println(INVALID_INPUT);
+            System.out.println(SETTINGS_OPTIONS);
+            userInput = input.nextInt();
+        }
+
+        switch(userInput) {
+            case 0: application(input, userdata, user);
+            case 1: System.out.println("Enter new password:");
+                    String password = input.next();
+                    if (password.equals(user.getPassword())) {System.out.println("Can't use same password.");}
+                    else {user.setPassword(password);}
+                    System.out.println("Password set.");
+            case 2: logout(userdata, user);
+            case 3: //TODO: MAKE DELETE ACCOUNT FUNCTION
+        }
     }
 }
