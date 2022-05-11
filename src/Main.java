@@ -123,13 +123,18 @@ public class Main {
         System.out.println("Enter the task:");
         String taskContent = input.next();
         Task task = new Task(taskContent);
-        boolean success = taskData.addTask(task);
-        if (!success) {
-            System.out.println("There was a problem. Please try again.");
+        taskData.addTask(task);
+    }
+
+    public static void viewSections(SectionData sectionData) {
+        ArrayList<Section> sections = sectionData.getSections();
+
+        for (int i = 0; i < sections.size(); i++) {
+            System.out.println((i + 1) + ". " + sections.get(i));
         }
     }
 
-    public static void viewSections() {
-        
+    public static void addSection(Scanner input, SectionData sectionData) {
+        System.out.println("Enter");
     }
 }

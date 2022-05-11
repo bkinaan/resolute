@@ -4,6 +4,7 @@ import java.util.ArrayList;
 public class TaskData {
     String username;
     private ArrayList<Task> tasks;
+    final private String FILE_EXT = "_tasks";
     
     public TaskData(String username) {
         this.username = username;
@@ -14,9 +15,23 @@ public class TaskData {
         return username;
     }
 
+    public ArrayList<Task> getTasks() {
+        return tasks;
+    }
+
+    public void addTask(Task task) {
+        tasks.add(task);
+        writeToFile();
+    }
+
+    public void removeTask(Task task) {
+        tasks.remove(task);
+        writeToFile();
+    }
+
     private ArrayList<Task> readFromFile() {
         ArrayList<Task> tasks;
-        File file = new File(this.getUsername() + "_tasks_all");
+        File file = new File(this.getUsername() + FILE_EXT);
         
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
             if (file.length() == 0) {
@@ -35,29 +50,19 @@ public class TaskData {
         return tasks;
     }
 
-    public boolean writeToFile() {
-        return writeToFile(tasks);
+    public void writeToFile() {
+        writeToFile(tasks);
     }
 
-    private boolean writeToFile(ArrayList<Task> tasks) {
-        File file = new File(this.getUsername() + "_tasks_all");
+    private void writeToFile(ArrayList<Task> tasks) {
+        File file = new File(this.getUsername() + FILE_EXT);
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
             oos.writeObject(tasks);
         } catch (IOException ioe) {
-            return false;
+            return;
         }
 
-        return true;
-    }
-
-    public ArrayList<Task> getTasks() {
-        return tasks;
-    }
-
-    public boolean addTask(Task task) {
-        tasks.add(task);
-        boolean success = writeToFile();
-        return success;
+        return;
     }
 }
